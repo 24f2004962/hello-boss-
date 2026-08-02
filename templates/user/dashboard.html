@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block title %}Dashboard - Trekker{% endblock %}
+{% block topbar_title %}My Dashboard{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Explore</span>
+<a href="{{ url_for('user.dashboard') }}" class="sidebar-link active">Dashboard</a>
+<a href="{{ url_for('user.browse') }}" class="sidebar-link">Browse Treks</a>
+<span class="sidebar-section" style="margin-top:.5rem;">My Activity</span>
+<a href="{{ url_for('user.my_bookings') }}" class="sidebar-link">My Bookings</a>
+<a href="{{ url_for('user.history') }}" class="sidebar-link">History</a>
+<a href="{{ url_for('user.notifications') }}" class="sidebar-link"> Notifications {% if unread_notifications > 0 %} <span class="badge-dot">{{ unread_notifications }}</span> {% endif %}
+</a>
+<a href="{{ url_for('user.profile') }}" class="sidebar-link">Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>Welcome, {{ session.get('name') }}</h1> <div class="sub">Here is what is available for your next adventure</div> </div> <a href="{{ url_for('user.browse') }}" class="btn btn-primary btn-sm">Browse all treks</a>
+</div> <!-- quick stats -->
+<div class="stat-row"> <div class="stat-card blue"> <div class="stat-num">{{ total_booked }}</div> <div class="stat-label">Active Bookings</div> </div> <div class="stat-card teal"> <div class="stat-num">{{ total_completed }}</div> <div class="stat-label">Treks Completed</div> </div>
+</div> <!-- available treks -->
+{% if open_treks %}
+<div style="font-weight:600;font-size:.95rem;margin-bottom:.8rem;color:var(--text);">Open Treks</div>
+<div class="trek-grid" style="margin-bottom:2rem;"> {% for t in open_treks %} <div class="trek-card"> <div class="trek-card-img"> <span class="diff-pill"> <span class="pill pill-{{ t.difficulty|lower }}">{{ t.difficulty }}</span> </span> </div> <div class="trek-card-body"> <h3>{{ t.name }}</h3> <div class="trek-card-meta"> <span>{{ t.location }}</span> <span>&middot;</span> <span>{{ t.duration }} days</span> {% if t.price %} <span>&middot;</span> <span>${{ '%.0f'|format(t.price) }}</span> {% endif %} </div> {% if t.start_date %} <div style="font-size:.75rem;color:var(--muted);"> {{ t.start_date.strftime('%d %b') }} to {{ t.end_date.strftime('%d %b %Y') if t.end_date else '?' }} </div> {% endif %} </div> <div class="trek-card-footer"> <div class="slots-text"><strong>{{ t.available_slots }}</strong> slots left</div> <a href="{{ url_for('user.trek_detail', trek_id=t.id) }}" class="btn btn-sm btn-primary" style="font-size:.78rem;">View</a> </div> </div> {% endfor %}
+</div>
+{% else %}
+<div class="card mb-4"> <div class="empty-box"><h5>No open treks right now</h5><p>Check back soon.</p></div>
+</div>
+{% endif %} <!-- latest bookings -->
+<div class="card"> <div class="card-header"> My Recent Bookings <a href="{{ url_for('user.my_bookings') }}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;">View all</a> </div> <div class="table-wrap"> {% if my_bookings %} <table class="data-table"> <thead><tr><th>Trek</th><th>Booked On</th><th>Status</th><th></th></tr></thead> <tbody> {% for b in my_bookings %} <tr> <td><strong>{{ b.trek.name }}</strong><br> <span style="font-size:.75rem;color:var(--muted);">{{ b.trek.location }}</span></td> <td>{{ b.booking_date.strftime('%d %b %Y') }}</td> <td><span class="pill pill-{{ b.status|lower }}">{{ b.status }}</span></td> <td> <a href="{{ url_for('user.trek_detail', trek_id=b.trek_id) }}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;">Details</a> </td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"> <h5>No bookings yet</h5> <p><a href="{{ url_for('user.browse') }}">Browse open treks</a> to make your first booking.</p> </div> {% endif %} </div>
+</div>
+{% endblock %}

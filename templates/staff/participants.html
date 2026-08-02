@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block title %}All Participants - Staff{% endblock %}
+{% block topbar_title %}All Participants{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Menu</span>
+<a href="{{ url_for('staff.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('staff.participants') }}" class="sidebar-link active">All Participants</a>
+<a href="{{ url_for('staff.profile') }}" class="sidebar-link">My Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>All Participants</h1> <div class="sub">Everyone booked across all your assigned treks</div> </div>
+</div> <div class="card"> <div class="table-wrap"> {% if bookings %} <table class="data-table"> <thead> <tr><th>Name</th><th>Email</th><th>Trek</th><th>Booked On</th><th>Status</th></tr> </thead> <tbody> {% for b in bookings %} <tr> <td><strong>{{ b.trekker.name }}</strong></td> <td>{{ b.trekker.email }}</td> <td>{{ b.trek.name }}</td> <td>{{ b.booking_date.strftime('%d %b %Y') }}</td> <td><span class="pill pill-{{ b.status|lower }}">{{ b.status }}</span></td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"> <h5>No participants yet</h5> <p>Participants will appear here once users book your treks.</p> </div> {% endif %} </div>
+</div>
+{% endblock %}

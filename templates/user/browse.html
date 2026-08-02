@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block title %}Browse Treks{% endblock %}
+{% block topbar_title %}Browse Treks{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Explore</span>
+<a href="{{ url_for('user.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('user.browse') }}" class="sidebar-link active">Browse Treks</a>
+<span class="sidebar-section" style="margin-top:.5rem;">My Activity</span>
+<a href="{{ url_for('user.my_bookings') }}" class="sidebar-link">My Bookings</a>
+<a href="{{ url_for('user.history') }}" class="sidebar-link">History</a>
+<a href="{{ url_for('user.notifications') }}" class="sidebar-link">Notifications</a>
+<a href="{{ url_for('user.profile') }}" class="sidebar-link">Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>Browse Treks</h1> <div class="sub">{{ treks.total }} open trek(s) available</div> </div>
+</div> <!-- filters -->
+<form method="GET" class="filter-bar"> <div class="filter-group"> <label>Search</label> <input type="text" name="q" class="form-control form-control-sm" placeholder="Name, location or keyword" value="{{ q }}"> </div> <div class="filter-group"> <label>Difficulty</label> <select name="difficulty" class="form-select form-select-sm"> <option value="">All levels</option> {% for d in ['Easy','Moderate','Hard'] %} <option value="{{ d }}" {% if difficulty==d %}selected{% endif %}>{{ d }}</option> {% endfor %} </select> </div> <div class="filter-group"> <label>Location</label> <select name="location" class="form-select form-select-sm"> <option value="">All locations</option> {% for l in all_locations %} <option value="{{ l }}" {% if location==l %}selected{% endif %}>{{ l }}</option> {% endfor %} </select> </div> <div class="filter-group"> <label>Sort by</label> <select name="sort" class="form-select form-select-sm"> <option value="date" {% if sort=='date' %}selected{% endif %}>Start Date</option> <option value="price" {% if sort=='price' %}selected{% endif %}>Price</option> <option value="duration" {% if sort=='duration' %}selected{% endif %}>Duration</option> </select> </div> <div class="filter-group" style="flex-direction:row;align-items:flex-end;gap:.4rem;padding-bottom:0;"> <button type="submit" class="btn btn-primary btn-sm">Filter</button> <button type="button" id="clear-filters" class="btn btn-outline-secondary btn-sm">Clear</button> </div>
+</form> {% if treks.items %}
+<div class="trek-grid"> {% for t in treks.items %} <div class="trek-card"> <div class="trek-card-img"> <span class="diff-pill"> <span class="pill pill-{{ t.difficulty|lower }}">{{ t.difficulty }}</span> </span> </div> <div class="trek-card-body"> <h3>{{ t.name }}</h3> <div class="trek-card-meta"> <span>{{ t.location }}</span> <span>&middot;</span> <span>{{ t.duration }} days</span> {% if t.price %} <span>&middot;</span> <span>${{ '%.0f'|format(t.price) }}</span> {% endif %} </div> {% if t.start_date %} <div style="font-size:.75rem;color:var(--muted);margin-bottom:.4rem;"> {{ t.start_date.strftime('%d %b') }} to {{ t.end_date.strftime('%d %b %Y') if t.end_date else '?' }} </div> {% endif %} {% if t.description %} <p style="font-size:.78rem;color:var(--muted);line-height:1.45;margin:0;"> {{ t.description[:80] }}{% if t.description|length > 80 %}...{% endif %} </p> {% endif %} </div> <div class="trek-card-footer"> <div class="slots-text"><strong>{{ t.available_slots }}</strong> / {{ t.total_slots }} slots</div> <a href="{{ url_for('user.trek_detail', trek_id=t.id) }}" class="btn btn-sm btn-primary" style="font-size:.78rem;">View</a> </div> </div> {% endfor %}
+</div> {% if treks.pages > 1 %}
+<nav class="mt-4"> <ul class="pagination pagination-sm"> {% for p in treks.iter_pages() %} {% if p %} <li class="page-item {% if p==treks.page %}active{% endif %}"> <a class="page-link" href="?page={{ p }}&q={{ q }}&difficulty={{ difficulty }}&location={{ location }}&sort={{ sort }}">{{ p }}</a> </li> {% else %} <li class="page-item disabled"><span class="page-link">...</span></li> {% endif %} {% endfor %} </ul>
+</nav>
+{% endif %} {% else %}
+<div class="empty-box" style="padding:4rem;"> <h5>No treks found</h5> <p>Try adjusting your filters or <a href="{{ url_for('user.browse') }}">clear all filters</a>.</p>
+</div>
+{% endif %}
+{% endblock %}

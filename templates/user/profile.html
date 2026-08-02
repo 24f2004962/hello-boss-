@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block title %}My Profile{% endblock %}
+{% block topbar_title %}My Profile{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Explore</span>
+<a href="{{ url_for('user.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('user.browse') }}" class="sidebar-link">Browse Treks</a>
+<span class="sidebar-section" style="margin-top:.5rem;">My Activity</span>
+<a href="{{ url_for('user.my_bookings') }}" class="sidebar-link">My Bookings</a>
+<a href="{{ url_for('user.history') }}" class="sidebar-link">History</a>
+<a href="{{ url_for('user.notifications') }}" class="sidebar-link">Notifications</a>
+<a href="{{ url_for('user.profile') }}" class="sidebar-link active">Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div><h1>My Profile</h1><div class="sub">Manage your account details</div></div>
+</div> <div class="card" style="max-width:520px;"> <div class="card-header">Account Details</div> <div class="card-body"> <form method="POST" action="{{ url_for('user.profile') }}"> <div class="mb-3"> <label class="form-label">Full Name</label> <input type="text" name="name" class="form-control" value="{{ user.name }}" required> </div> <div class="mb-3"> <label class="form-label">Email <span class="text-muted fw-normal">(cannot change)</span></label> <input type="email" class="form-control" value="{{ user.email }}" disabled> </div> <div class="mb-3"> <label class="form-label">Contact Number</label> <input type="text" name="contact" class="form-control" value="{{ user.contact or '' }}" placeholder="Your phone number"> </div> <div class="mb-4"> <label class="form-label">Address</label> <input type="text" name="address" class="form-control" value="{{ user.address or '' }}" placeholder="City, Country"> </div> <hr> <p class="text-muted mb-3" style="font-size:.83rem;"> Change password — leave blank to keep your current password </p> <div class="mb-3"> <label class="form-label">Current Password</label> <input type="password" name="old_password" class="form-control" placeholder="Required only if changing password"> </div> <div class="mb-3"> <label class="form-label">New Password</label> <input type="password" name="new_password" class="form-control" placeholder="Leave blank to keep current"> </div> <div class="mb-4"> <label class="form-label">Confirm New Password</label> <input type="password" name="confirm" class="form-control" placeholder="Repeat new password"> </div> <button type="submit" class="btn btn-primary">Save Changes</button> </form> </div>
+</div>
+{% endblock %}

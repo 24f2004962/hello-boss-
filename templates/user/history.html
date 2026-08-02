@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}Trekking History{% endblock %}
+{% block topbar_title %}Trekking History{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Explore</span>
+<a href="{{ url_for('user.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('user.browse') }}" class="sidebar-link">Browse Treks</a>
+<span class="sidebar-section" style="margin-top:.5rem;">My Activity</span>
+<a href="{{ url_for('user.my_bookings') }}" class="sidebar-link">My Bookings</a>
+<a href="{{ url_for('user.history') }}" class="sidebar-link active">History</a>
+<a href="{{ url_for('user.notifications') }}" class="sidebar-link">Notifications</a>
+<a href="{{ url_for('user.profile') }}" class="sidebar-link">Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>Trekking History</h1> <div class="sub">{{ bookings|length }} completed trek(s)</div> </div>
+</div> {% if bookings %}
+<div class="stat-row mb-3"> <div class="stat-card"> <div class="stat-num">{{ bookings|length }}</div> <div class="stat-label">Treks Completed</div> </div> <div class="stat-card teal"> <div class="stat-num">{{ total_days }}</div> <div class="stat-label">Total Days Trekked</div> </div>
+</div> <div class="card"> <div class="table-wrap"> <table class="data-table"> <thead> <tr><th>Trek Name</th><th>Location</th><th>Difficulty</th><th>Duration</th><th>Dates</th><th>Status</th></tr> </thead> <tbody> {% for b in bookings %} <tr> <td><strong>{{ b.trek.name }}</strong></td> <td>{{ b.trek.location }}</td> <td><span class="pill pill-{{ b.trek.difficulty|lower }}">{{ b.trek.difficulty }}</span></td> <td>{{ b.trek.duration }} days</td> <td style="font-size:.83rem;"> {% if b.trek.start_date %} {{ b.trek.start_date.strftime('%d %b') }} to {{ b.trek.end_date.strftime('%d %b %Y') if b.trek.end_date else '?' }} {% else %}—{% endif %} </td> <td><span class="pill pill-completed">Completed</span></td> </tr> {% endfor %} </tbody> </table> </div>
+</div>
+{% else %}
+<div class="card"> <div class="empty-box"> <h5>No completed treks yet</h5> <p><a href="{{ url_for('user.browse') }}">Book a trek</a> to start building your history.</p> </div>
+</div>
+{% endif %}
+{% endblock %}

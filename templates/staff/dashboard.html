@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block title %}Staff Dashboard{% endblock %}
+{% block topbar_title %}My Dashboard{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Menu</span>
+<a href="{{ url_for('staff.dashboard') }}" class="sidebar-link active">Dashboard</a>
+<a href="{{ url_for('staff.participants') }}" class="sidebar-link">All Participants</a>
+<a href="{{ url_for('staff.profile') }}" class="sidebar-link">My Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>My Dashboard</h1> <div class="sub">Treks assigned to you by the administrator</div> </div>
+</div> <div class="stat-row"> <div class="stat-card"> <div class="stat-num">{{ treks|length }}</div> <div class="stat-label">Assigned Treks</div> </div> <div class="stat-card blue"> <div class="stat-num">{{ total_participants }}</div> <div class="stat-label">Active Participants</div> </div> <div class="stat-card teal"> <div class="stat-num">{{ open_count }}</div> <div class="stat-label">Open Treks</div> </div> <div class="stat-card orange"> <div class="stat-num">{{ completed_count }}</div> <div class="stat-label">Completed</div> </div>
+</div> <div class="card"> <div class="card-header">My Assigned Treks</div> <div class="table-wrap"> {% if treks %} <table class="data-table"> <thead> <tr><th>Trek Name</th><th>Location</th><th>Difficulty</th><th>Participants</th><th>Slots</th><th>Dates</th><th>Status</th><th>Actions</th></tr> </thead> <tbody> {% for t in treks %} {% set booked = t.bookings|selectattr('status','eq','Booked')|list|length %} <tr> <td><strong>{{ t.name }}</strong></td> <td>{{ t.location }}</td> <td><span class="pill pill-{{ t.difficulty|lower }}">{{ t.difficulty }}</span></td> <td>{{ booked }}</td> <td> {{ t.available_slots }} / {{ t.total_slots }} {% set pct = ((t.available_slots / t.total_slots) * 100)|int if t.total_slots else 0 %} <div class="slots-bar"><div class="slots-fill" data-pct="{{ pct }}"></div></div> </td> <td style="font-size:.8rem;"> {% if t.start_date %} {{ t.start_date.strftime('%d %b') }} to {{ t.end_date.strftime('%d %b %Y') if t.end_date else '?' }} {% else %}—{% endif %} </td> <td><span class="pill pill-{{ t.status|lower }}">{{ t.status }}</span></td> <td> <a href="{{ url_for('staff.manage_trek', trek_id=t.id) }}" class="btn btn-sm btn-primary" style="font-size:.75rem;">Manage</a> </td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"> <h5>No treks assigned yet</h5> <p>The administrator will assign treks to you. Please check back later.</p> </div> {% endif %} </div>
+</div>
+{% endblock %}

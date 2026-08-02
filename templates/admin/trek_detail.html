@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block title %}{{ trek.name }} - Admin{% endblock %}
+{% block topbar_title %}Trek Detail{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Main</span>
+<a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('admin.treks') }}" class="sidebar-link active">Treks</a>
+<a href="{{ url_for('admin.staff') }}" class="sidebar-link">Staff</a>
+<a href="{{ url_for('admin.users') }}" class="sidebar-link">Users</a>
+<a href="{{ url_for('admin.bookings') }}" class="sidebar-link">Bookings</a>
+<span class="sidebar-section" style="margin-top:.5rem;">Tools</span>
+<a href="{{ url_for('admin.reports') }}" class="sidebar-link">Reports</a>
+<a href="{{ url_for('admin.search') }}" class="sidebar-link">Search</a>
+<a href="{{ url_for('admin.settings') }}" class="sidebar-link">Settings</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>{{ trek.name }}</h1> <div class="sub">{{ trek.location }}</div> </div> <div class="d-flex gap-2"> <a href="{{ url_for('admin.edit_trek', trek_id=trek.id) }}" class="btn btn-outline-secondary btn-sm">Edit</a> <a href="{{ url_for('admin.treks') }}" class="btn btn-outline-secondary btn-sm">Back</a> </div>
+</div> <div class="row g-3 mb-3"> <div class="col-md-8"> <div class="card"> <div class="card-header">Trek Information</div> <div class="card-body"> <table class="table table-sm mb-0"> <tr><td class="text-muted" style="width:150px;">Difficulty</td> <td><span class="pill pill-{{ trek.difficulty|lower }}">{{ trek.difficulty }}</span></td></tr> <tr><td class="text-muted">Duration</td><td>{{ trek.duration }} days</td></tr> <tr><td class="text-muted">Total Slots</td><td>{{ trek.total_slots }}</td></tr> <tr><td class="text-muted">Available Slots</td><td>{{ trek.available_slots }}</td></tr> <tr><td class="text-muted">Status</td> <td><span class="pill pill-{{ trek.status|lower }}">{{ trek.status }}</span></td></tr> <tr><td class="text-muted">Start Date</td> <td>{{ trek.start_date.strftime('%d %b %Y') if trek.start_date else '—' }}</td></tr> <tr><td class="text-muted">End Date</td> <td>{{ trek.end_date.strftime('%d %b %Y') if trek.end_date else '—' }}</td></tr> <tr><td class="text-muted">Price</td> <td>{% if trek.price %}${{ '%.2f'|format(trek.price) }}{% else %}—{% endif %}</td></tr> <tr><td class="text-muted">Assigned Staff</td> <td>{{ trek.staff.name if trek.staff else '—' }}</td></tr> </table> {% if trek.description %} <hr> <p style="font-size:.875rem;color:#4b5563;">{{ trek.description }}</p> {% endif %} {% if trek.highlights %} <p style="font-size:.82rem;color:var(--muted);"><strong>Highlights:</strong> {{ trek.highlights }}</p> {% endif %} </div> </div> </div> <div class="col-md-4"> <div class="stat-card"> <div class="stat-num">{{ bookings|selectattr('status','eq','Booked')|list|length }}</div> <div class="stat-label">Active Bookings</div> </div> <div class="stat-card orange mt-2"> <div class="stat-num">{{ bookings|selectattr('status','eq','Cancelled')|list|length }}</div> <div class="stat-label">Cancelled</div> </div> <div class="stat-card teal mt-2"> <div class="stat-num">{{ bookings|selectattr('status','eq','Completed')|list|length }}</div> <div class="stat-label">Completed</div> </div> </div>
+</div> <!-- bookings for this trek -->
+<div class="card"> <div class="card-header">Bookings ({{ bookings|length }})</div> <div class="table-wrap"> {% if bookings %} <table class="data-table"> <thead><tr><th>User</th><th>Email</th><th>Booked On</th><th>Status</th><th>Notes</th></tr></thead> <tbody> {% for b in bookings %} <tr> <td><strong>{{ b.trekker.name }}</strong></td> <td>{{ b.trekker.email }}</td> <td>{{ b.booking_date.strftime('%d %b %Y') }}</td> <td><span class="pill pill-{{ b.status|lower }}">{{ b.status }}</span></td> <td>{{ b.notes or '—' }}</td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"><h5>No bookings yet</h5></div> {% endif %} </div>
+</div>
+{% endblock %}

@@ -1,0 +1,526 @@
+/* Custom stylesheet for Trek App */
+
+:root {
+    --green: #2d6a4f;
+    --green-dark: #1b4332;
+    --green-mid: #40916c;
+    --green-light: #95d5b2;
+    --green-pale: #d8f3dc;
+    --orange: #d4651a;
+    --bg: #f4f6f5;
+    --white: #ffffff;
+    --border: #dee3e0;
+    --text: #1e2d27;
+    --muted: #6b7a72;
+    --sidebar-w: 240px;
+    --radius: 8px;
+    --shadow: 0 1px 8px rgba(0,0,0,.08);
+    --shadow-md: 0 3px 20px rgba(0,0,0,.12);
+}
+
+
+/* --- Base -------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+a { color: var(--green-mid); }
+a:hover { color: var(--green-dark); }
+
+/* --- Sidebar ---------------------------------------------- */
+.sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--green-dark);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    padding: 1.2rem 1.4rem;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar-brand span {
+    display: block;
+    font-size: .72rem;
+    font-weight: 400;
+    color: rgba(255,255,255,.45);
+    margin-top: .15rem;
+}
+
+.sidebar-section {
+    padding: .9rem 1.4rem .25rem;
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: rgba(255,255,255,.35);
+}
+
+.sidebar-nav { padding: .4rem 0; flex: 1; }
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .55rem 1.4rem;
+    color: rgba(255,255,255,.72);
+    font-size: .875rem;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+}
+
+.sidebar-link:hover {
+    background: rgba(255,255,255,.07);
+    color: #fff;
+    text-decoration: none;
+}
+
+.sidebar-link.active {
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    border-left-color: var(--green-light);
+}
+
+.sidebar-link .badge-dot {
+    margin-left: auto;
+    background: var(--orange);
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 700;
+    padding: .1rem .4rem;
+    border-radius: 20px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 1rem 1.4rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    font-size: .8rem;
+    color: rgba(255,255,255,.45);
+}
+
+.sidebar-footer .user-name  { color: #fff; font-weight: 600; font-size: .875rem; }
+.sidebar-footer a { color: rgba(255,255,255,.5); font-size: .78rem; }
+.sidebar-footer a:hover { color: #fff; }
+
+/* --- Main content area ------------------------------------ */
+.main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: .75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.topbar-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+.topbar-right { display: flex; align-items: center; gap: 1rem; }
+
+.page-body { padding: 1.75rem 2rem; flex: 1; }
+
+/* --- Page header ------------------------------------------ */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 .2rem;
+}
+
+.page-header .sub {
+    font-size: .82rem;
+    color: var(--muted);
+}
+
+/* --- Stat cards ------------------------------------------- */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+
+.stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid var(--green);
+    box-shadow: var(--shadow);
+}
+
+.stat-card.orange { border-left-color: var(--orange); }
+.stat-card.blue   { border-left-color: #3b82f6; }
+.stat-card.teal   { border-left-color: var(--green-mid); }
+.stat-card.red    { border-left-color: #ef4444; }
+
+.stat-num  { font-size: 1.8rem; font-weight: 800; color: var(--text); line-height: 1; }
+.stat-label{ font-size: .75rem; color: var(--muted); margin-top: .25rem; }
+
+/* --- Cards ------------------------------------------------- */
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: none;
+    overflow: hidden;
+}
+
+.card-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: .9rem 1.25rem;
+    font-weight: 600;
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-body { padding: 1.25rem; }
+
+/* --- Tables ----------------------------------------------- */
+.table-wrap { overflow-x: auto; }
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .875rem;
+}
+
+.data-table th {
+    background: #f8faf9;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--muted);
+    padding: .7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: .8rem 1rem;
+    border-bottom: 1px solid #f0f2f1;
+    vertical-align: middle;
+    color: var(--text);
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: #fafbfa; }
+
+/* --- Badges / Status pills --------------------------------- */
+.pill {
+    display: inline-block;
+    padding: .18rem .6rem;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pill-open       { background: #d1fae5; color: #065f46; }
+.pill-closed     { background: #fee2e2; color: #991b1b; }
+.pill-pending    { background: #fef3c7; color: #78350f; }
+.pill-approved   { background: #dbeafe; color: #1e40af; }
+.pill-completed  { background: #ede9fe; color: #5b21b6; }
+.pill-booked     { background: #dbeafe; color: #1e40af; }
+.pill-cancelled  { background: #fee2e2; color: #991b1b; }
+.pill-active     { background: #d1fae5; color: #065f46; }
+.pill-blacklisted{ background: #fee2e2; color: #991b1b; }
+.pill-easy       { background: #d1fae5; color: #065f46; }
+.pill-moderate   { background: #fef3c7; color: #78350f; }
+.pill-hard       { background: #fee2e2; color: #7f1d1d; }
+
+/* --- Buttons ---------------------------------------------- */
+.btn-primary  { background: var(--green);      border-color: var(--green); }
+.btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.btn-success  { background: var(--green-mid);  border-color: var(--green-mid); }
+.btn-success:hover { background: var(--green);     border-color: var(--green); }
+
+/* --- Forms ------------------------------------------------- */
+.form-control:focus, .form-select:focus {
+    border-color: var(--green-mid);
+    box-shadow: 0 0 0 3px rgba(64,145,108,.15);
+}
+
+.form-label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: .3rem;
+}
+
+/* --- Auth pages -------------------------------------------- */
+.auth-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(140deg, var(--green-dark) 0%, var(--green-mid) 100%);
+    padding: 1.5rem;
+}
+
+.auth-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2.25rem 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: var(--shadow-md);
+}
+
+.auth-card h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: .2rem;
+}
+
+.auth-card .sub {
+    font-size: .83rem;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+}
+
+.auth-logo {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--green-dark);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.auth-logo .dot {
+    width: 32px; height: 32px;
+    background: var(--green-dark);
+    border-radius: 8px;
+}
+
+/* --- Trek cards (browse page) ------------------------------ */
+.trek-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.1rem;
+}
+
+.trek-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .2s, transform .2s;
+}
+
+.trek-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.trek-card-img {
+    height: 130px;
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+}
+
+.trek-card-img .diff-pill {
+    position: absolute;
+    bottom: .6rem; right: .6rem;
+}
+
+.trek-card-body { padding: 1rem; flex: 1; }
+.trek-card-body h3 { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; color: var(--text); }
+.trek-card-meta  { font-size: .78rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .5rem; }
+
+.trek-card-footer {
+    padding: .75rem 1rem;
+    border-top: 1px solid #f0f2f1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: .8rem;
+}
+
+.slots-text { color: var(--muted); }
+.slots-text strong { color: var(--text); }
+
+/* --- Empty state ------------------------------------------- */
+.empty-box {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+}
+.empty-box h5 { font-weight: 600; color: #4b5563; margin-bottom: .4rem; }
+.empty-box p  { font-size: .88rem; margin: 0; }
+
+/* --- Notifications ---------------------------------------- */
+.notif-item {
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid #f0f2f1;
+    font-size: .875rem;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item.unread     { background: #f0faf4; }
+.notif-date { font-size: .72rem; color: var(--muted); margin-top: .2rem; }
+
+/* --- Flash messages --------------------------------------- */
+.flash-zone {
+    position: fixed;
+    top: 1rem; right: 1rem;
+    z-index: 9999;
+    width: 330px;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+/* --- Trek detail hero -------------------------------------- */
+.trek-hero {
+    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    border-radius: var(--radius);
+    padding: 2rem;
+    color: #fff;
+    margin-bottom: 1.25rem;
+}
+
+.trek-hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: .3rem; }
+.trek-hero .loc { font-size: .9rem; opacity: .8; }
+
+.trek-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: .75rem;
+    margin-top: 1.25rem;
+}
+
+.trek-info-item {
+    background: rgba(255,255,255,.12);
+    border-radius: 6px;
+    padding: .65rem .9rem;
+}
+
+.trek-info-item .label { font-size: .68rem; opacity: .7; text-transform: uppercase; letter-spacing: .05em; }
+.trek-info-item .value { font-size: .95rem; font-weight: 700; margin-top: .1rem; }
+
+/* --- Pagination ------------------------------------------- */
+.pagination .page-link { color: var(--green); border-color: var(--border); }
+.pagination .page-link:hover { background: var(--green-pale); border-color: var(--green-light); }
+.pagination .active .page-link { background: var(--green); border-color: var(--green); }
+
+/* --- Filters bar ------------------------------------------ */
+.filter-bar {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: .9rem 1.25rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    align-items: flex-end;
+}
+
+.filter-bar .filter-group { display: flex; flex-direction: column; }
+.filter-bar .filter-group label { font-size: .72rem; font-weight: 600; color: #4b5563; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .25rem; }
+.filter-bar .form-control,
+.filter-bar .form-select { font-size: .875rem; min-width: 130px; }
+
+/* --- Progress bar for slots ------------------------------- */
+.slots-bar {
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: .4rem;
+}
+
+.slots-fill {
+    height: 100%;
+    background: var(--green-mid);
+    border-radius: 3px;
+    transition: width .4s;
+}
+
+.slots-fill.low  { background: #ef4444; }
+.slots-fill.mid  { background: var(--orange); }
+
+/* --- Reports chart placeholder ---------------------------- */
+.chart-bar-row {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: .5rem;
+    font-size: .83rem;
+}
+
+.chart-bar-label { width: 90px; color: var(--muted); font-size: .78rem; }
+
+.chart-bar-track {
+    flex: 1;
+    background: #f0f2f1;
+    border-radius: 3px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.chart-bar-fill {
+    height: 100%;
+    background: var(--green-mid);
+    border-radius: 3px;
+    transition: width .4s;
+    min-width: 4px;
+}
+
+.chart-bar-count { color: var(--text); font-weight: 600; min-width: 30px; text-align: right; }
+
+/* --- Responsive ------------------------------------------- */
+@media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main    { margin-left: 0; }
+    .page-body { padding: 1rem; }
+    .trek-grid { grid-template-columns: 1fr; }
+    .stat-row  { grid-template-columns: 1fr 1fr; }
+}

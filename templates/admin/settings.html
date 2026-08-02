@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block title %}Settings - Admin{% endblock %}
+{% block topbar_title %}Settings{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Main</span>
+<a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('admin.treks') }}" class="sidebar-link">Treks</a>
+<a href="{{ url_for('admin.staff') }}" class="sidebar-link">Staff</a>
+<a href="{{ url_for('admin.users') }}" class="sidebar-link">Users</a>
+<a href="{{ url_for('admin.bookings') }}" class="sidebar-link">Bookings</a>
+<span class="sidebar-section" style="margin-top:.5rem;">Tools</span>
+<a href="{{ url_for('admin.reports') }}" class="sidebar-link">Reports</a>
+<a href="{{ url_for('admin.search') }}" class="sidebar-link">Search</a>
+<a href="{{ url_for('admin.settings') }}" class="sidebar-link active">Settings</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div><h1>Settings</h1><div class="sub">Manage your admin account</div></div>
+</div> <div class="row g-3" style="max-width:640px;"> <div class="col-12"> <div class="card"> <div class="card-header">Account Information</div> <div class="card-body"> <table class="table table-sm mb-0"> <tr><td class="text-muted" style="width:120px;">Name</td><td><strong>{{ user.name }}</strong></td></tr> <tr><td class="text-muted">Email</td><td>{{ user.email }}</td></tr> <tr><td class="text-muted">Role</td><td>Administrator</td></tr> </table> </div> </div> </div> <div class="col-12"> <div class="card"> <div class="card-header">Change Password</div> <div class="card-body"> <form method="POST" class="validate-form"> <div class="js-error text-danger mb-2" style="font-size:.82rem;"></div> <div class="mb-3"> <label class="form-label">Current Password</label> <input type="password" name="old_password" class="form-control" required> </div> <div class="mb-3"> <label class="form-label">New Password</label> <input type="password" name="new_password" class="form-control" required minlength="6"> </div> <div class="mb-4"> <label class="form-label">Confirm New Password</label> <input type="password" name="confirm" class="form-control" required> </div> <button type="submit" class="btn btn-primary">Update Password</button> </form> </div> </div> </div>
+</div>
+{% endblock %}

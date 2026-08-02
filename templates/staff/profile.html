@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block title %}My Profile - Staff{% endblock %}
+{% block topbar_title %}My Profile{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Menu</span>
+<a href="{{ url_for('staff.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('staff.participants') }}" class="sidebar-link">All Participants</a>
+<a href="{{ url_for('staff.profile') }}" class="sidebar-link active">My Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div><h1>My Profile</h1><div class="sub">Update your account information</div></div>
+</div> <div class="card" style="max-width:520px;"> <div class="card-header">Account Details</div> <div class="card-body"> <form method="POST" action="{{ url_for('staff.profile') }}"> <div class="mb-3"> <label class="form-label">Full Name</label> <input type="text" name="name" class="form-control" value="{{ user.name }}" required> </div> <div class="mb-3"> <label class="form-label">Email <span class="text-muted fw-normal">(cannot change)</span></label> <input type="email" class="form-control" value="{{ user.email }}" disabled> </div> <div class="mb-3"> <label class="form-label">Contact Number</label> <input type="text" name="contact" class="form-control" value="{{ user.contact or '' }}" placeholder="Your phone number"> </div> <div class="mb-4"> <label class="form-label">Bio / Experience</label> <textarea name="bio" class="form-control" rows="3" placeholder="Brief description of your trekking experience">{{ user.bio or '' }}</textarea> </div> <hr> <p class="text-muted mb-3" style="font-size:.83rem;"> Change password (leave blank to keep your current password) </p> <div class="mb-3"> <label class="form-label">Current Password</label> <input type="password" name="old_password" class="form-control" placeholder="Required only if changing password"> </div> <div class="mb-3"> <label class="form-label">New Password</label> <input type="password" name="new_password" class="form-control" placeholder="Leave blank to keep current"> </div> <div class="mb-4"> <label class="form-label">Confirm New Password</label> <input type="password" name="confirm" class="form-control" placeholder="Repeat new password"> </div> <button type="submit" class="btn btn-primary">Save Changes</button> </form> </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block title %}Dashboard - Admin{% endblock %}
+{% block topbar_title %}Dashboard{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Main</span>
+<a href="{{ url_for('admin.dashboard') }}" class="sidebar-link active">Dashboard</a>
+<a href="{{ url_for('admin.treks') }}" class="sidebar-link">Treks</a>
+<a href="{{ url_for('admin.staff') }}" class="sidebar-link"> Staff {% if pending_staff > 0 %}<span class="badge-dot">{{ pending_staff }}</span>{% endif %}
+</a>
+<a href="{{ url_for('admin.users') }}" class="sidebar-link">Users</a>
+<a href="{{ url_for('admin.bookings') }}" class="sidebar-link">Bookings</a> <span class="sidebar-section" style="margin-top:.5rem;">Tools</span>
+<a href="{{ url_for('admin.reports') }}" class="sidebar-link">Reports</a>
+<a href="{{ url_for('admin.search') }}" class="sidebar-link">Search</a>
+<a href="{{ url_for('admin.settings') }}" class="sidebar-link">Settings</a>
+{% endblock %} {% block content %} <div class="page-header"> <div> <h1>Dashboard</h1> <div class="sub">Platform overview</div> </div> <a href="{{ url_for('admin.add_trek') }}" class="btn btn-primary btn-sm">Add trek</a>
+</div> <!-- top statistics -->
+<div class="stat-row"> <div class="stat-card"> <div class="stat-num">{{ total_treks }}</div> <div class="stat-label">Total Treks</div> </div> <div class="stat-card teal"> <div class="stat-num">{{ open_treks }}</div> <div class="stat-label">Open Treks</div> </div> <div class="stat-card blue"> <div class="stat-num">{{ total_users }}</div> <div class="stat-label">Registered Users</div> </div> <div class="stat-card"> <div class="stat-num">{{ total_staff }}</div> <div class="stat-label">Trek Staff</div> </div> <div class="stat-card orange"> <div class="stat-num">{{ total_bookings }}</div> <div class="stat-label">Total Bookings</div> </div> {% if pending_staff > 0 %} <div class="stat-card red"> <div class="stat-num">{{ pending_staff }}</div> <div class="stat-label">Pending Approvals</div> </div> {% endif %}
+</div> <div class="row g-3"> <!-- latest bookings --> <div class="col-lg-8"> <div class="card"> <div class="card-header"> Recent Bookings <a href="{{ url_for('admin.bookings') }}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;">View all</a> </div> <div class="table-wrap"> {% if recent_bookings %} <table class="data-table"> <thead> <tr> <th>ID</th><th>User</th><th>Trek</th><th>Date</th><th>Status</th> </tr> </thead> <tbody> {% for b in recent_bookings %} <tr> <td style="color:var(--muted);">B{{ '%03d'|format(b.id) }}</td> <td><strong>{{ b.trekker.name }}</strong></td> <td>{{ b.trek.name }}</td> <td>{{ b.booking_date.strftime('%d %b %Y') }}</td> <td><span class="pill pill-{{ b.status|lower }}">{{ b.status }}</span></td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"><h5>No bookings yet</h5><p>Bookings will appear here once users register for treks.</p></div> {% endif %} </div> </div> </div> <!-- status chart --> <div class="col-lg-4"> <div class="card"> <div class="card-header">Trek Status Breakdown</div> <div class="card-body"> {% set max_val = status_counts.values()|max or 1 %} {% for label, count in status_counts.items() %} <div class="chart-bar-row" data-max="{{ max_val }}"> <div class="chart-bar-label">{{ label }}</div> <div class="chart-bar-track"> <div class="chart-bar-fill" data-val="{{ count }}" style="width:0%"></div> </div> <div class="chart-bar-count">{{ count }}</div> </div> {% endfor %} </div> </div> {% if pending_staff > 0 %} <div class="card mt-3" style="border-left:4px solid var(--orange);"> <div class="card-body" style="padding:.9rem 1.25rem;"> <div style="font-weight:600;font-size:.9rem;margin-bottom:.3rem;"> Staff Approvals Waiting </div> <p class="text-muted mb-2" style="font-size:.83rem;"> {{ pending_staff }} staff registration(s) need your review. </p> <a href="{{ url_for('admin.staff') }}?status=pending" class="btn btn-sm btn-warning">Review now</a> </div> </div> {% endif %} </div>
+</div> {% endblock %} {% block extra_js %}
+<script>
+/* animate stats on load */
+document.addEventListener('DOMContentLoaded', function () { var rows = document.querySelectorAll('.chart-bar-row'); var max = rows.length ? parseInt(rows[0].getAttribute('data-max') || '1') : 1; document.querySelectorAll('.chart-bar-fill').forEach(function (el) { var val = parseInt(el.getAttribute('data-val') || '0'); el.style.width = Math.round((val / max) * 100) + '%'; });
+});
+</script>
+{% endblock %}

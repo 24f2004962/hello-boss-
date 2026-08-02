@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block title %}My Bookings{% endblock %}
+{% block topbar_title %}My Bookings{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Explore</span>
+<a href="{{ url_for('user.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('user.browse') }}" class="sidebar-link">Browse Treks</a>
+<span class="sidebar-section" style="margin-top:.5rem;">My Activity</span>
+<a href="{{ url_for('user.my_bookings') }}" class="sidebar-link active">My Bookings</a>
+<a href="{{ url_for('user.history') }}" class="sidebar-link">History</a>
+<a href="{{ url_for('user.notifications') }}" class="sidebar-link">Notifications</a>
+<a href="{{ url_for('user.profile') }}" class="sidebar-link">Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>My Bookings</h1> <div class="sub">{{ bookings|length }} booking record(s)</div> </div> <a href="{{ url_for('user.browse') }}" class="btn btn-primary btn-sm">Browse Treks</a>
+</div> <!-- status filter tabs -->
+<div style="display:flex;gap:.5rem;margin-bottom:1rem;"> <a href="{{ url_for('user.my_bookings') }}" class="btn btn-sm {% if not status_filter %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a> {% for s in ['Booked','Cancelled','Completed'] %} <a href="{{ url_for('user.my_bookings') }}?status={{ s }}" class="btn btn-sm {% if status_filter==s %}btn-primary{% else %}btn-outline-secondary{% endif %}"> {{ s }} </a> {% endfor %}
+</div> <div class="card"> <div class="table-wrap"> {% if bookings %} <table class="data-table"> <thead> <tr><th>Trek</th><th>Location</th><th>Trek Dates</th><th>Booked On</th><th>Status</th><th>Actions</th></tr> </thead> <tbody> {% for b in bookings %} <tr> <td><strong>{{ b.trek.name }}</strong></td> <td>{{ b.trek.location }}</td> <td style="font-size:.83rem;"> {% if b.trek.start_date %} {{ b.trek.start_date.strftime('%d %b') }} to {{ b.trek.end_date.strftime('%d %b %Y') if b.trek.end_date else '?' }} {% else %}—{% endif %} </td> <td>{{ b.booking_date.strftime('%d %b %Y') }}</td> <td><span class="pill pill-{{ b.status|lower }}">{{ b.status }}</span></td> <td> <div class="d-flex gap-1"> <a href="{{ url_for('user.trek_detail', trek_id=b.trek_id) }}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;">Details</a> {% if b.status == 'Booked' %} <form method="POST" action="{{ url_for('user.cancel', booking_id=b.id) }}" data-confirm="Cancel your booking for &quot;{{ b.trek.name }}&quot;?"> <button class="btn btn-sm btn-outline-danger" style="font-size:.75rem;">Cancel</button> </form> {% endif %} </div> </td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"> <h5>No bookings found</h5> <p><a href="{{ url_for('user.browse') }}">Browse open treks</a> to make your first booking.</p> </div> {% endif %} </div>
+</div>
+{% endblock %}

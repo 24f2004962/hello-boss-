@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}Users - Admin{% endblock %}
+{% block topbar_title %}Users{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Main</span>
+<a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('admin.treks') }}" class="sidebar-link">Treks</a>
+<a href="{{ url_for('admin.staff') }}" class="sidebar-link">Staff</a>
+<a href="{{ url_for('admin.users') }}" class="sidebar-link active">Users</a>
+<a href="{{ url_for('admin.bookings') }}" class="sidebar-link">Bookings</a>
+<span class="sidebar-section" style="margin-top:.5rem;">Tools</span>
+<a href="{{ url_for('admin.reports') }}" class="sidebar-link">Reports</a>
+<a href="{{ url_for('admin.search') }}" class="sidebar-link">Search</a>
+<a href="{{ url_for('admin.settings') }}" class="sidebar-link">Settings</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>Users</h1> <div class="sub">{{ users.total }} registered trekker(s)</div> </div>
+</div> <form method="GET" class="filter-bar"> <div class="filter-group"> <label>Search</label> <input type="text" name="q" class="form-control form-control-sm" placeholder="Name or email" value="{{ q }}"> </div> <div class="filter-group"> <label>Status</label> <select name="status" class="form-select form-select-sm"> <option value="">All</option> <option value="active" {% if status_filter=='active' %}selected{% endif %}>Active</option> <option value="blacklisted" {% if status_filter=='blacklisted' %}selected{% endif %}>Blacklisted</option> </select> </div> <div class="filter-group" style="flex-direction:row;align-items:flex-end;gap:.4rem;padding-bottom:0;"> <button type="submit" class="btn btn-primary btn-sm">Filter</button> <button type="button" id="clear-filters" class="btn btn-outline-secondary btn-sm">Clear</button> </div>
+</form> <div class="card"> <div class="table-wrap"> {% if users.items %} <table class="data-table"> <thead> <tr><th>ID</th><th>Name</th><th>Email</th><th>Contact</th><th>Bookings</th><th>Joined</th><th>Status</th><th>Actions</th></tr> </thead> <tbody> {% for u in users.items %} <tr> <td style="color:var(--muted);">U{{ '%03d'|format(u.id) }}</td> <td> <a href="{{ url_for('admin.user_detail', user_id=u.id) }}" style="font-weight:600;color:var(--text);">{{ u.name }}</a> </td> <td>{{ u.email }}</td> <td>{{ u.contact or '—' }}</td> <td>{{ u.bookings|length }}</td> <td>{{ u.created_at.strftime('%d %b %Y') }}</td> <td><span class="pill pill-{{ u.status }}">{{ u.status|title }}</span></td> <td> <form method="POST" action="{{ url_for('admin.toggle_user', user_id=u.id) }}" data-confirm="Change status for {{ u.name }}?"> <button class="btn btn-sm btn-outline-warning" style="font-size:.75rem;"> {% if u.status == 'active' %}Blacklist{% else %}Restore{% endif %} </button> </form> </td> </tr> {% endfor %} </tbody> </table> {% else %} <div class="empty-box"><h5>No users found</h5><p>Registered trekkers will appear here.</p></div> {% endif %} </div>
+</div> {% if users.pages > 1 %}
+<nav class="mt-3"> <ul class="pagination pagination-sm"> {% for p in users.iter_pages() %} {% if p %} <li class="page-item {% if p==users.page %}active{% endif %}"> <a class="page-link" href="?page={{ p }}&q={{ q }}&status={{ status_filter }}">{{ p }}</a> </li> {% else %} <li class="page-item disabled"><span class="page-link">...</span></li> {% endif %} {% endfor %} </ul>
+</nav>
+{% endif %}
+{% endblock %}

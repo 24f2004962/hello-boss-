@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block title %}Search - Admin{% endblock %}
+{% block topbar_title %}Search{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Main</span>
+<a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('admin.treks') }}" class="sidebar-link">Treks</a>
+<a href="{{ url_for('admin.staff') }}" class="sidebar-link">Staff</a>
+<a href="{{ url_for('admin.users') }}" class="sidebar-link">Users</a>
+<a href="{{ url_for('admin.bookings') }}" class="sidebar-link">Bookings</a>
+<span class="sidebar-section" style="margin-top:.5rem;">Tools</span>
+<a href="{{ url_for('admin.reports') }}" class="sidebar-link">Reports</a>
+<a href="{{ url_for('admin.search') }}" class="sidebar-link active">Search</a>
+<a href="{{ url_for('admin.settings') }}" class="sidebar-link">Settings</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div><h1>Search</h1><div class="sub">Search across treks, users, and staff at once</div></div>
+</div> <form method="GET" style="max-width:560px;margin-bottom:2rem;"> <div class="d-flex gap-2"> <input type="text" name="q" class="form-control" placeholder="Enter a name, email, or location" value="{{ q }}" autofocus> <button type="submit" class="btn btn-primary">Search</button> {% if q %}<a href="{{ url_for('admin.search') }}" class="btn btn-outline-secondary">Clear</a>{% endif %} </div>
+</form> {% if q %} <div class="card mb-3"> <div class="card-header">Treks ({{ results.treks|length }})</div> {% if results.treks %} <div class="table-wrap"> <table class="data-table"> <thead><tr><th>ID</th><th>Name</th><th>Location</th><th>Status</th><th></th></tr></thead> <tbody> {% for t in results.treks %} <tr> <td>#{{ t.id }}</td> <td><strong>{{ t.name }}</strong></td> <td>{{ t.location }}</td> <td><span class="pill pill-{{ t.status|lower }}">{{ t.status }}</span></td> <td><a href="{{ url_for('admin.edit_trek', trek_id=t.id) }}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;">Edit</a></td> </tr> {% endfor %} </tbody> </table> </div> {% else %} <div class="empty-box" style="padding:1rem;"><p>No treks matched.</p></div> {% endif %}
+</div> <div class="card mb-3"> <div class="card-header">Users ({{ results.users|length }})</div> {% if results.users %} <div class="table-wrap"> <table class="data-table"> <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th></th></tr></thead> <tbody> {% for u in results.users %} <tr> <td>U{{ '%03d'|format(u.id) }}</td> <td><strong>{{ u.name }}</strong></td> <td>{{ u.email }}</td> <td><span class="pill pill-{{ u.status }}">{{ u.status|title }}</span></td> <td><a href="{{ url_for('admin.user_detail', user_id=u.id) }}" class="btn btn-sm btn-outline-secondary" style="font-size:.75rem;">View</a></td> </tr> {% endfor %} </tbody> </table> </div> {% else %} <div class="empty-box" style="padding:1rem;"><p>No users matched.</p></div> {% endif %}
+</div> <div class="card"> <div class="card-header">Staff ({{ results.staff|length }})</div> {% if results.staff %} <div class="table-wrap"> <table class="data-table"> <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th></tr></thead> <tbody> {% for s in results.staff %} <tr> <td>S{{ '%03d'|format(s.id) }}</td> <td><strong>{{ s.name }}</strong></td> <td>{{ s.email }}</td> <td><span class="pill pill-{{ s.status }}">{{ s.status|title }}</span></td> </tr> {% endfor %} </tbody> </table> </div> {% else %} <div class="empty-box" style="padding:1rem;"><p>No staff matched.</p></div> {% endif %}
+</div> {% else %}
+<div class="empty-box" style="padding:4rem;"> <h5>Enter a search term above</h5> <p>Type a name, email address, or location to search across all records at once.</p>
+</div>
+{% endif %}
+{% endblock %}

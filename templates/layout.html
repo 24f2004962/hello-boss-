@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block body %} <!-- flash messages -->
+<div class="flash-zone"> {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %} <div class="alert alert-{{ category }} alert-dismissible shadow-sm py-2 px-3 mb-0" role="alert" style="font-size:.875rem;"> {{ message }} <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert"></button> </div> {% endfor %} {% endwith %}
+</div> <!-- sidebar navigation -->
+<aside class="sidebar"> <a href="#" class="sidebar-brand"> Trek App <span>Management System</span> </a> <nav class="sidebar-nav"> {% block sidebar %}{% endblock %} </nav> <div class="sidebar-footer"> <div class="user-name">{{ session.get('name', '') }}</div> <div style="margin:.2rem 0 .5rem;font-size:.72rem;text-transform:capitalize;"> {{ session.get('role', '') }} </div> <a href="{{ url_for('auth.logout') }}">Sign out</a> </div>
+</aside> <!-- main section -->
+<div class="main"> <header class="topbar"> <div class="topbar-title">{% block topbar_title %}{% endblock %}</div> <div class="topbar-right"> {% if session.get('role') == 'user' %} <a href="{{ url_for('user.notifications') }}" class="btn btn-sm btn-outline-secondary position-relative" style="font-size:.8rem;"> Notifications {% if unread_notifications > 0 %} <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.6rem;"> {{ unread_notifications }} </span> {% endif %} </a> {% endif %} <span style="font-size:.8rem;color:var(--muted);">{{ session.get('name', '') }}</span> </div> </header> <div class="page-body"> {% block content %}{% endblock %} </div>
+</div> {% endblock %}

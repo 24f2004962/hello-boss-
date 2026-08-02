@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block title %}Notifications{% endblock %}
+{% block topbar_title %}Notifications{% endblock %} {% block sidebar %}
+<span class="sidebar-section">Explore</span>
+<a href="{{ url_for('user.dashboard') }}" class="sidebar-link">Dashboard</a>
+<a href="{{ url_for('user.browse') }}" class="sidebar-link">Browse Treks</a>
+<span class="sidebar-section" style="margin-top:.5rem;">My Activity</span>
+<a href="{{ url_for('user.my_bookings') }}" class="sidebar-link">My Bookings</a>
+<a href="{{ url_for('user.history') }}" class="sidebar-link">History</a>
+<a href="{{ url_for('user.notifications') }}" class="sidebar-link active">Notifications</a>
+<a href="{{ url_for('user.profile') }}" class="sidebar-link">Profile</a>
+{% endblock %} {% block content %}
+<div class="page-header"> <div> <h1>Notifications</h1> <div class="sub">{{ notifications|length }} message(s)</div> </div>
+</div> <div class="card"> {% if notifications %} {% for n in notifications %} <div class="notif-item {% if not n.is_read %}unread{% endif %}"> <div>{{ n.message }}</div> <div class="notif-date">{{ n.created_at.strftime('%d %b %Y, %H:%M') }}</div> </div> {% endfor %} {% else %} <div class="empty-box"> <h5>No notifications</h5> <p>You will receive notifications when you book treks or when their status changes.</p> </div> {% endif %}
+</div>
+{% endblock %}
